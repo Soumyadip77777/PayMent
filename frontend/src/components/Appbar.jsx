@@ -36,10 +36,7 @@ export const Appbar = () => {
     navigate("/signin");
   };
 
-  const handleHistory = () => {
-    navigate("/history");
-  };
-
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -72,12 +69,7 @@ export const Appbar = () => {
 
         {dropdownOpen && (
           <div className="absolute right-0 top-14 mt-2 w-40 bg-white border rounded shadow-md z-10">
-            <button
-              onClick={handleHistory}
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              Payment History
-            </button>
+            
             <button
               onClick={handleLogout}
               className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"

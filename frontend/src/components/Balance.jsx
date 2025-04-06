@@ -25,11 +25,13 @@ export const Balance = () => {
   }, []);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 text-gray-800 w-full max-w-md mx-auto mt-6">
-      <h2 className="text-lg font-semibold mb-2 text-center">Account Balance</h2>
-      <p className="text-2xl font-bold text-center text-blue-600">
-        ₹ {balance.toFixed(2)}
-      </p>
+    <div className="bg-blue-600 rounded-2xl shadow-md p-6 max-w-sm mx-auto mt-6 border border-blue-700">
+      <div className="text-center text-white">
+        <h2 className="text-xl font-bold mb-2">Account Balance</h2>
+        <p className="text-3xl font-extrabold tracking-wide">
+          ₹ {balance.toFixed(2)}
+        </p>
+      </div>
     </div>
   );
 };

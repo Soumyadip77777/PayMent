@@ -28,22 +28,27 @@ export const Users = () => {
   }, [filter]);
 
   return (
-    <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-full max-w-2xl mx-auto">
-      <h2 className="font-bold text-xl mb-4 text-blue-700">Users</h2>
+    <div className="w-full max-w-5xl mx-auto">
+      <h2 className="font-bold text-xl mb-4 text-white">Users</h2>
 
       <input
         onChange={(e) => setFilter(e.target.value)}
         type="text"
         placeholder="Search users..."
-        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 mb-4 bg-transparent border border-gray-500 text-white placeholder-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
-      <div className="overflow-y-auto max-h-96 pr-1 custom-scroll">
-        {users.length > 0 ? (
-          users.map((user) => <User key={user._id} user={user} />)
-        ) : (
-          <div className="text-gray-500 text-center mt-10">No users found</div>
-        )}
+      <div
+        className="overflow-y-auto max-h-96 pr-1"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <div className="space-y-2">
+          {users.length > 0 ? (
+            users.map((user) => <User key={user._id} user={user} />)
+          ) : (
+            <div className="text-gray-300 text-center mt-10">No users found</div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -53,21 +58,21 @@ function User({ user }) {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between items-center border-b py-3">
+    <div className="flex justify-between items-center border-b border-gray-700 py-3 text-white">
       <div className="flex items-center">
-        <div className="rounded-full h-12 w-12 bg-blue-600 text-white flex items-center justify-center mr-3 text-xl font-semibold">
+        <div className="rounded-full h-10 w-10 bg-blue-600 flex items-center justify-center mr-3 text-lg font-semibold">
           {user.firstName[0].toUpperCase()}
         </div>
-        <div className="text-md font-medium text-gray-800">
+        <div className="text-md font-medium">
           {user.firstName.toUpperCase()} {user.lastName.toUpperCase()}
         </div>
       </div>
-      <Button
-        onClick={() =>
-          navigate(`/send?id=${user._id}&name=${user.firstName}`)
-        }
-        label="Send Money"
-      />
+      <button
+        onClick={() => navigate(`/send?id=${user._id}&name=${user.firstName}`)}
+        className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-lg transition duration-200"
+      >
+        Send
+      </button>
     </div>
   );
 }
