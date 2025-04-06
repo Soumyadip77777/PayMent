@@ -2,23 +2,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const Signin = () => {
+export const Signup = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignin = async () => {
+  const handleSignup = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signin`,
-        { username, password }
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signup`,
+        {
+          username,
+          firstName,
+          lastName,
+          password
+        }
       );
       localStorage.setItem("token", response.data.token);
-      navigate("/dashboard"); // Update this route as per your app structure
+      navigate("/signin");
     } catch (err) {
-      console.error("Signin failed:", err);
-      alert("Signin failed. Please check your credentials.");
+      console.error("Signup failed:", err);
+      alert("Signup failed. Please try again.");
     }
   };
 
@@ -26,11 +33,33 @@ export const Signin = () => {
     <div className="min-h-screen bg-[#0c0c1d] flex items-center justify-center px-4">
       <div className="bg-[#111827] text-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-1 text-center">
-          Welcome Back to <span className="text-blue-500">PayMent</span>
+          Create your <span className="text-blue-500">PayMent</span> account
         </h1>
         <p className="text-sm text-gray-400 mb-6 text-center">
-          Enter your credentials to log in
+          Enter your information to create an account
         </p>
+
+        <div className="mb-4">
+          <label className="block text-sm mb-1">First Name</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="John"
+            className="w-full px-4 py-2 rounded-md bg-[#1f2937] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Last Name</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Doe"
+            className="w-full px-4 py-2 rounded-md bg-[#1f2937] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
         <div className="mb-4">
           <label className="block text-sm mb-1">Email</label>
@@ -64,19 +93,19 @@ export const Signin = () => {
         </div>
 
         <button
-          onClick={handleSignin}
+          onClick={handleSignup}
           className="w-full py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 font-semibold transition"
         >
-          Sign in
+          Sign up
         </button>
 
         <p className="text-center text-sm text-gray-400 mt-6">
-          Don’t have an account?{" "}
+          Already have an account?{" "}
           <span
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/signin")}
             className="text-blue-400 hover:underline cursor-pointer"
           >
-            Sign up
+            Sign in
           </span>
         </p>
       </div>
