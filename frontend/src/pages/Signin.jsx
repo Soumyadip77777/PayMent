@@ -13,7 +13,7 @@ export const Signin = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signin`,
+        `${import.meta.env.vITE_BACKEND_URL}/api/v1/user/signin`,
         { username, password }
       );
 
