@@ -1,40 +1,43 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      toast.error("Please enter both email and password!");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.vITE_BACKEND_URL}/api/v1/user/signin`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signin`,
         { username, password }
       );
 
       localStorage.setItem("token", response.data.token);
 
-      toast.success("Login successful!", {
-        position: "top-center",
-        autoClose: 1500,
-        onClose: () => navigate("/dashboard"),
-      });
+      toast.success("Login successful! Redirecting...");
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
       console.error("Login failed:", err);
-      toast.error("Invalid credentials or server error.", {
-        position: "top-center",
-      });
+      toast.error(err.response?.data?.message || "Invalid credentials or server error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#0c0c1d] flex items-center justify-center px-4">
-      <ToastContainer />
       <div className="bg-[#111827] text-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-1 text-center">
           Welcome to <span className="text-blue-500">PayMent</span>
@@ -44,12 +47,12 @@ export const Signin = () => {
         </p>
 
         <div className="mb-4">
-          <label className="block text-sm mb-1">Email</label>
+          <label className="block text-sm mb-1">Email (Gmail only)</label>
           <input
             type="email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="you@gmail.com"
             className="w-full px-4 py-2 rounded-md bg-[#1f2937] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -76,9 +79,14 @@ export const Signin = () => {
 
         <button
           onClick={handleLogin}
-          className="w-full py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 font-semibold transition"
+          disabled={loading}
+          className={`w-full py-2 rounded-md font-semibold transition ${
+            loading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"
+          }`}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-center text-sm text-gray-400 mt-6">
