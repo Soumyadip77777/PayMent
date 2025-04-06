@@ -12,10 +12,11 @@ export const Signin = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("https://payment-ytqc.onrender.com", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signin`,
+        { username, password }
+      );
+
       localStorage.setItem("token", response.data.token);
 
       toast.success("Login successful!", {
