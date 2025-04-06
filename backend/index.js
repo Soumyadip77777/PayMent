@@ -7,7 +7,7 @@ const { PORT } = require("./config");
 
 // CORS Configuration
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://your-frontend-url.com"], // replace with your frontend URLs
+  origin: ["http://localhost:5173", "https://pay-ment-one.vercel.app/"], // replace with your frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 };
