@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,9 +9,21 @@ export const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async () => {
+    if (!firstName || !lastName || !username || !password) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    if (!username.endsWith("@gmail.com")) {
+      toast.error("Only Gmail addresses are allowed");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signup`,
@@ -21,11 +34,15 @@ export const Signup = () => {
           password
         }
       );
+
+      toast.success("Signup successful! Redirecting...");
       localStorage.setItem("token", response.data.token);
-      navigate("/signin");
+      setTimeout(() => navigate("/signin"), 1500);
     } catch (err) {
       console.error("Signup failed:", err);
-      alert("Signup failed. Please try again.");
+      toast.error(err.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,12 +79,12 @@ export const Signup = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm mb-1">Email</label>
+          <label className="block text-sm mb-1">Email (Gmail only)</label>
           <input
             type="email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="you@gmail.com"
             className="w-full px-4 py-2 rounded-md bg-[#1f2937] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -94,9 +111,14 @@ export const Signup = () => {
 
         <button
           onClick={handleSignup}
-          className="w-full py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 font-semibold transition"
+          disabled={loading}
+          className={`w-full py-2 rounded-md font-semibold transition ${
+            loading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"
+          }`}
         >
-          Sign up
+          {loading ? "Signing up..." : "Sign up"}
         </button>
 
         <p className="text-center text-sm text-gray-400 mt-6">
