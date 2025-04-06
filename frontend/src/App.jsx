@@ -23,6 +23,7 @@ function App() {
           <Route path="/send" element={<SendMoney />} />
           <Route path="/transfer-success" element={<TransferSuccess />} />
         </Routes>
+         <App />
       </BrowserRouter>
       <ToastContainer />
     </>
